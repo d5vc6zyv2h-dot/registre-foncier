@@ -195,6 +195,6 @@ Il constitue un prototype expérimental destiné à illustrer l'utilisation des 
 
 ## 👨‍💻 Auteur
 
-**Jordan Mvuezolo Tshitshi**
+**groupe04**
 
 Projet académique — Registre Foncier Numérique sur Blockchain.
