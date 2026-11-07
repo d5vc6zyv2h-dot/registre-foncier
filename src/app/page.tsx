@@ -120,6 +120,7 @@ const parcellesFiltrees = parcelles.filter((p) => {
   const [numero, setNumero] = useState("");
   const [localisation, setLocalisation] = useState("");
   const [nomProprietaire, setNomProprietaire] = useState("");
+  const [adresseProprietaire, setAdresseProprietaire] = useState("");
  const [cid, setCid] = useState("");
 const [fichier, setFichier] = useState<File | null>(null);
 const [uploadEnCours, setUploadEnCours] = useState(false);
@@ -378,11 +379,21 @@ resultat.push({
       setErreur("Connectez MetaMask au réseau Polygon Amoy.");
       return;
     }
+if (
+  !numero.trim() ||
+  !localisation.trim() ||
+  !cid.trim() ||
+  !nomProprietaire.trim() ||
+  !adresseProprietaire.trim()
+) {
+  setErreur("Tous les champs sont obligatoires.");
+  return;
+}
 
-    if (!numero.trim() || !localisation.trim() || !cid.trim()) {
-      setErreur("Tous les champs sont obligatoires.");
-      return;
-    }
+if (!/^0x[a-fA-F0-9]{40}$/.test(adresseProprietaire.trim())) {
+  setErreur("Adresse blockchain du propriétaire invalide.");
+  return;
+}
     const lat = Math.round(Number(latitude) * 1000000);
 const lng = Math.round(Number(longitude) * 1000000);
 
@@ -409,7 +420,7 @@ if (
       return;
     }
 console.log("LOCALISATION ENVOYÉE :", localisation);
-console.log("PROPRIÉTAIRE ENVOYÉ :", address);
+console.log("PROPRIÉTAIRE ENVOYÉ :", adresseProprietaire);
     setEnregistrement(true);
 
     try {
@@ -420,7 +431,7 @@ console.log("PROPRIÉTAIRE ENVOYÉ :", address);
   abi: ABI,
   functionName: "enregistrerParcelle",
   args: [
-    address,
+    adresseProprietaire.trim() as `0x${string}`,
     numero.trim(),
     localisation.trim(),
     BigInt(lat),
@@ -574,6 +585,16 @@ return (
     required
     className="w-full rounded-lg border border-slate-700 bg-slate-950 p-3 outline-none focus:border-emerald-500"
   />
+  <div>
+  <label>Adresse blockchain du propriétaire</label>
+  <input
+    type="text"
+    placeholder="0x..."
+    value={adresseProprietaire}
+    onChange={(e) => setAdresseProprietaire(e.target.value)}
+    required
+  />
+</div>
 </div>
           <div>
   <label className="mb-2 block text-sm text-slate-300">
